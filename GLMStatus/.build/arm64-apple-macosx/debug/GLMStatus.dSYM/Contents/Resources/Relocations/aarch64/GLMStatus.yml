@@ -1,0 +1,24 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/kkq/MyProject/ClaudeCode/GLMStatus/.build/arm64-apple-macosx/debug/GLMStatus'
+relocations:
+  - { offset: 0xC9C0C, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV4bodyQrvg', symObjAddr: 0x0, symBinAddr: 0x100000E10, symSize: 0x1A8 }
+  - { offset: 0xC9CB6, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledNameV2, symObjAddr: 0x1A8, symBinAddr: 0x100000FB8, symSize: 0x80 }
+  - { offset: 0xC9CCA, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI12MenuBarExtraVyAA5LabelVyAA4TextVAA5ImageVGAGGACyxq_GAA5SceneAAWl', symObjAddr: 0x3E8, symBinAddr: 0x1000011F8, symSize: 0x74 }
+  - { offset: 0xC9CDE, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledNameAbstractV2, symObjAddr: 0x45C, symBinAddr: 0x10000126C, symSize: 0x78 }
+  - { offset: 0xC9CF2, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppVAC7SwiftUI0B0AAWl', symObjAddr: 0x508, symBinAddr: 0x100001318, symSize: 0x68 }
+  - { offset: 0xC9D06, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV7SwiftUI0B0AA4BodyAdEP_AD5ScenePWT', symObjAddr: 0x5B4, symBinAddr: 0x1000013C4, symSize: 0x24 }
+  - { offset: 0xC9D1A, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppVMa', symObjAddr: 0x5D8, symBinAddr: 0x1000013E8, symSize: 0x14 }
+  - { offset: 0xC9D2E, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI4TextVWOh', symObjAddr: 0x600, symBinAddr: 0x100001410, symSize: 0x40 }
+  - { offset: 0xC9D42, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI4TextV7StorageOWOe', symObjAddr: 0x640, symBinAddr: 0x100001450, symSize: 0x48 }
+  - { offset: 0xC9D62, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV4bodyQrvg', symObjAddr: 0x0, symBinAddr: 0x100000E10, symSize: 0x1A8 }
+  - { offset: 0xC9D86, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV4bodyQrvg7SwiftUI4TextVyXEfU_', symObjAddr: 0x228, symBinAddr: 0x100001038, symSize: 0xF4 }
+  - { offset: 0xC9E07, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI11ViewBuilderV15buildExpressionyxxAA0C0RzlFZ', symObjAddr: 0x31C, symBinAddr: 0x10000112C, symSize: 0x44 }
+  - { offset: 0xC9E29, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI11ViewBuilderV10buildBlockyxxAA0C0RzlFZ', symObjAddr: 0x360, symBinAddr: 0x100001170, symSize: 0x44 }
+  - { offset: 0xC9E86, size: 0x8, addend: 0x0, symName: '_$s7SwiftUI12SceneBuilderV15buildExpressionyxxAA0C0RzlFZ', symObjAddr: 0x3A4, symBinAddr: 0x1000011B4, symSize: 0x44 }
+  - { offset: 0xC9EBF, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV5$mainyyFZ', symObjAddr: 0x4D4, symBinAddr: 0x1000012E4, symSize: 0x34 }
+  - { offset: 0xC9EDF, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppVACycfC', symObjAddr: 0x570, symBinAddr: 0x100001380, symSize: 0x4 }
+  - { offset: 0xC9F00, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV7SwiftUI0B0AadEP4body4BodyQzvgTW', symObjAddr: 0x574, symBinAddr: 0x100001384, symSize: 0x14 }
+  - { offset: 0xC9F1F, size: 0x8, addend: 0x0, symName: '_$s9GLMStatus0A3AppV7SwiftUI0B0AadEPxycfCTW', symObjAddr: 0x588, symBinAddr: 0x100001398, symSize: 0x14 }
+  - { offset: 0xC9F54, size: 0x8, addend: 0x0, symName: _GLMStatus_main, symObjAddr: 0x59C, symBinAddr: 0x1000013AC, symSize: 0x18 }
+...
