@@ -193,6 +193,12 @@ final public class ModelService {
         saveKeysToFile()
     }
 
+    public func updateKeyProvider(at index: Int, newProvider: Provider) throws {
+        guard index >= 0, index < keys.count else { return }
+        keys[index].provider = newProvider
+        saveKeysToFile()
+    }
+
     // MARK: - API Methods
 
     public func refresh(silent: Bool = false) async {

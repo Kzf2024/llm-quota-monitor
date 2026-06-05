@@ -10,6 +10,7 @@ public struct KeyManageView: View {
     @State private var editingKeyID: UUID?
     @State private var editingName = ""
     @State private var editingKeyValue = ""
+    @State private var editingProvider: Provider = .zhiPu
     @State private var keyToDelete: IndexSet?
     @State private var showDeleteConfirm = false
     @State private var pendingDeleteIndex: Int?
@@ -87,49 +88,16 @@ public struct KeyManageView: View {
 
     @ViewBuilder
     private func keyRow(for entry: APIKeyEntry, at index: Int) -> some View {
-        if editingKeyID == entry.id {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text("名称:")
-                        .font(.callout)
-                        .foregroundColor(.secondary)
-                        .frame(width: 48, alignment: .trailing)
-                    TextField("名称", text: $editingName)
-                        .textFieldStyle(.roundedBorder)
-                        .onSubmit {
-                            commitEdit(for: entry, at: index)
-                        }
-                }
-
-                HStack {
-                    Text("Key:")
-                        .font(.callout)
-                        .foregroundColor(.secondary)
-                        .frame(width: 48, alignment: .trailing)
-                    TextField("API Key", text: $editingKeyValue)
-                        .textFieldStyle(.roundedBorder)
-                        .onSubmit {
-                            commitEdit(for: entry, at: index)
-                        }
-                }
-
-                HStack {
-                    Spacer()
-                    Button("取消") {
-                        editingKeyID = nil
-                        editingName = ""
-                        editingKeyValue = ""
+        HStack(spacing: 8) {
+            if editingKeyID == entry.id {
+                Picker("平台", selection: $editingProvider) {
+                    ForEach(Provider.allCases, id: \.self) { p in
+                        Text(p.shortTag).tag(p)
                     }
-                    Button("保存") {
-                        commitEdit(for: entry, at: index)
-                    }
-                    .disabled(editingName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                              || editingKeyValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-            }
-            .padding(.vertical, 4)
-        } else {
-            HStack {
+                .labelsHidden()
+                .frame(width: 80)
+            } else {
                 Text(entry.provider.shortTag)
                     .font(.system(size: 10))
                     .foregroundColor(.white)
@@ -139,7 +107,42 @@ public struct KeyManageView: View {
                         RoundedRectangle(cornerRadius: 3)
                             .fill(entry.provider == .zhiPu ? Color.blue : Color.purple)
                     )
+            }
 
+            if editingKeyID == entry.id {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("名称")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                            .frame(width: 40, alignment: .trailing)
+                        TextField("名称", text: $editingName)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    HStack {
+                        Text("Key")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                            .frame(width: 40, alignment: .trailing)
+                        TextField("API Key", text: $editingKeyValue)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    HStack {
+                        Spacer()
+                        Button("取消") {
+                            editingKeyID = nil
+                            editingName = ""
+                            editingKeyValue = ""
+                        }
+                        Button("保存") {
+                            commitEdit(for: entry, at: index)
+                        }
+                        .disabled(editingName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                  || editingKeyValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    }
+                }
+                .padding(.vertical, 2)
+            } else {
                 VStack(alignment: .leading) {
                     Text(entry.name)
                         .fontWeight(.medium)
@@ -154,6 +157,7 @@ public struct KeyManageView: View {
                     editingKeyID = entry.id
                     editingName = entry.name
                     editingKeyValue = entry.key
+                    editingProvider = entry.provider
                 } label: {
                     Image(systemName: "pencil")
                 }
@@ -214,6 +218,9 @@ public struct KeyManageView: View {
             }
             if trimmedKey != entry.key {
                 try service.updateKeyValue(at: index, newKey: trimmedKey)
+            }
+            if editingProvider != entry.provider {
+                try service.updateKeyProvider(at: index, newProvider: editingProvider)
             }
             editingKeyID = nil
             editingName = ""
