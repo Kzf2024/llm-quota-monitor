@@ -38,28 +38,31 @@ public struct KeyManageView: View {
 
             Divider()
 
-            // Add Key Section
+            // Add / Edit Key Section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Picker("平台", selection: $newProvider) {
+                    Picker("平台", selection: editingKeyID != nil ? $editingProvider : $newProvider) {
                         ForEach(Provider.allCases, id: \.self) { p in
                             Text(p.displayName).tag(p)
                         }
                     }
                     .frame(width: 100)
+                    .disabled(editingKeyID != nil)
 
-                    TextField("名称", text: $newName)
+                    TextField("名称", text: editingKeyID != nil ? $editingName : $newName)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 100)
 
-                    TextField("API Key", text: $newKey)
+                    TextField("API Key", text: editingKeyID != nil ? $editingKeyValue : $newKey)
                         .textFieldStyle(.roundedBorder)
 
-                    Button("添加") {
-                        addKey()
+                    if editingKeyID == nil {
+                        Button("添加") {
+                            addKey()
+                        }
+                        .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                  || newKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
-                    .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                              || newKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
 
                 if let errorMessage {
@@ -89,70 +92,38 @@ public struct KeyManageView: View {
     @ViewBuilder
     private func keyRow(for entry: APIKeyEntry, at index: Int) -> some View {
         HStack(spacing: 8) {
-            if editingKeyID == entry.id {
-                Picker("平台", selection: $editingProvider) {
-                    ForEach(Provider.allCases, id: \.self) { p in
-                        Text(p.shortTag).tag(p)
-                    }
-                }
-                .labelsHidden()
-                .frame(width: 80)
-            } else {
-                Text(entry.provider.shortTag)
-                    .font(.system(size: 10))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 5)
-                    .padding(.vertical, 2)
-                    .background(
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(entry.provider == .zhiPu ? Color.blue : Color.purple)
-                    )
+            Text(entry.provider.shortTag)
+                .font(.system(size: 10))
+                .foregroundColor(.white)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(entry.provider == .zhiPu ? Color.blue : Color.purple)
+                )
+
+            VStack(alignment: .leading) {
+                Text(entry.name)
+                    .fontWeight(.medium)
+                Text(entry.maskedKey)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundColor(.secondary)
             }
 
+            Spacer()
+
             if editingKeyID == entry.id {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        Text("名称")
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                            .frame(width: 40, alignment: .trailing)
-                        TextField("名称", text: $editingName)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    HStack {
-                        Text("Key")
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                            .frame(width: 40, alignment: .trailing)
-                        TextField("API Key", text: $editingKeyValue)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    HStack {
-                        Spacer()
-                        Button("取消") {
-                            editingKeyID = nil
-                            editingName = ""
-                            editingKeyValue = ""
-                        }
-                        Button("保存") {
-                            commitEdit(for: entry, at: index)
-                        }
-                        .disabled(editingName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                  || editingKeyValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    }
+                Button("取消") {
+                    editingKeyID = nil
+                    editingName = ""
+                    editingKeyValue = ""
                 }
-                .padding(.vertical, 2)
+                Button("保存") {
+                    commitEdit()
+                }
+                .disabled(editingName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                          || editingKeyValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             } else {
-                VStack(alignment: .leading) {
-                    Text(entry.name)
-                        .fontWeight(.medium)
-                    Text(entry.maskedKey)
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-
                 Button {
                     editingKeyID = entry.id
                     editingName = entry.name
@@ -207,7 +178,11 @@ public struct KeyManageView: View {
         }
     }
 
-    private func commitEdit(for entry: APIKeyEntry, at index: Int) {
+    private func commitEdit() {
+        guard let editingID = editingKeyID,
+              let index = service.keys.firstIndex(where: { $0.id == editingID }) else { return }
+        let entry = service.keys[index]
+
         let trimmedName = editingName.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedKey = editingKeyValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedName.isEmpty, !trimmedKey.isEmpty else { return }

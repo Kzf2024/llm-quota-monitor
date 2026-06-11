@@ -274,6 +274,7 @@ private struct KeyRow: View {
 
                 Text(entry.name)
                     .font(.system(size: 12))
+                    .foregroundColor(isActive ? .green : .primary)
                     .lineLimit(1)
 
                 Text(entry.provider.shortTag)
@@ -294,16 +295,10 @@ private struct KeyRow: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 2)
-            .background(isActive ? Color.accentColor.opacity(0.1) : Color.clear)
+            .background(isActive ? Color.blue.opacity(0.1) : Color.clear)
         }
-        .buttonStyle(RowButtonStyle())
-    }
-}
-
-private struct RowButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .contentShape(Rectangle())
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
     }
 }
 
